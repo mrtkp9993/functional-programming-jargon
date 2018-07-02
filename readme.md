@@ -221,7 +221,7 @@ Aşağıdaki tabloda bir kaç kategori örneği verilmiştir.
 
 **Hask**, Haskell tiplerinin ve fonksiyonlarının bir kategorisidir.
 
-**Hask** kategorisinin nesneleri Haskell'deki _tipler_, ```A``` nesnesinden ```B``` nesnesine tanımlı morfizmalar ise ```A -> B``` şeklindeki fonksiyonlardır. 
+**Hask** kategorisinin nesneleri Haskell'deki _tipler_, ```A``` nesnesinden ```B``` nesnesine tanımlı morfizmalar ise ```A -> B``` şeklindeki fonksiyonlardır.
 
 
 __Daha Fazla Kaynak__
@@ -238,6 +238,51 @@ _Morfizma_, bir kategorideki iki nesne arasındaki eşlemedir.
 4. Birebir ve örten morfizmalar, _isomorfizma_ olarak adlandırılır.
 5. Bir nesneden kendisine ve örten morfizmalar, _endomorfizma_ olarak adlandırılır.
 6. Bir nesneden kendisine isomorfizmalar, _otomorfizma_ olarak adlandırılır.
+
+## Monoid
+
+_Monoid_, geçişken bir ikili işleme ve birim elemana sahip bir yapıdır.
+
+### Haskell'de monoidler
+
+Haskell'de monoidler aşağıdaki şekilde tanımlanır:
+
+```haskell
+class Monoid m where
+  mempty :: m
+  mappend :: m -> m -> m
+  mconcat :: [m] -> m
+  mconcat = foldr mappend mempty
+```
+
+En basit monoid örneği, birleştirme (concatenation) işlemi ile birlikte listelerdir:
+
+```haskell
+instance Monoid [a] where
+  mempty = []
+  mappend x y = x ++ y
+  mconcat = concat
+```
+
+## Yarıgrup (Semigroup)
+
+Yarıgrup, geçişken bir ikili işleme sahip bir yapıdır. Dolayısıyla, monoidler, yarıgrupların bir altkümesidir.
+
+### Haskell'de Semigruplar
+
+```haskell
+class Semigroup a where
+    (<>) :: a -> a -> a
+    sconcat :: [[Data.List.Nonempty|Nonempty]] a -> a
+    stimes :: Integral b => b -> a -> a
+```
+
+Bir örnek verirsek,
+
+```
+Sum 3 <> Sum 4       -- "Sum a" tipi ile birlikte, "<>" ikili işlemi "+" işlemine dönüşür
+-- Sum {getSum = 7}
+```
 
 ## Functor
 
@@ -259,7 +304,7 @@ class Functor f where
 
 ## Applicative Functor
 
-Applicative functor, funktor ve monad arasında konumlanan ve 
+Applicative functor, funktor ve monad arasında konumlanan ve
 
 ```
 pure id <*> v = v                            -- Identity
@@ -280,7 +325,7 @@ class (Functor f) => Applicative f where
 
 ## Monad
 
-Bir ![](src/MCC.png) funktoru verilsin. ![](src/c.png) kategorisindeki her ![](src/bigX.png) nesnesi için 
+Bir ![](src/MCC.png) funktoru verilsin. ![](src/c.png) kategorisindeki her ![](src/bigX.png) nesnesi için
 -  ![](src/unitMX.png)
 - ![](src/joinMX.png)
 morfizmalarını tanımlayalım. ```M``` funktoru, ```unit``` ve ```join``` morfizmaları ile birlikte bir _monad_ olarak adlandırılır.
@@ -288,6 +333,17 @@ morfizmalarını tanımlayalım. ```M``` funktoru, ```unit``` ve ```join``` morf
 ### Haskell'de monadlar
 
 Monadlar, bir araya getirilebilen hesaplama adımları olarak düşünülebilirler. Ayrıca monadlar, saf hesaplamalara G/Ç, ortak ortam, güncellenebilir durumlar vb. özellikler ekler.
+
+En sık kullanılan monadlar:
+* Identity: Monad dönüştürücüleri ile birlikte kullanılırlar.
+* Maybe: Bir sonuç dönmeyebilecek hesaplamalar için kullanılırlar.
+* Error: Bir hata verebilecek hesaplamalar için kullanılırlar.
+* List: Non-deterministik hesaplamalar yapmak için kullanılırlar.
+* IO: G/Ç işlemleri için kullanılırlar.
+* State: Bir durumun (state) sürdürülmesi gereken hesaplar için kullanılırlar.
+* Reader: Paylaşılan bir ortamdan girdi okumak için kullanılırlar.
+* Writer: Bir ortama sonuçları yazmak için kullanılırlar.
+* Cont: Yarıda kesilebilecek/ yeniden başlatılabilecek hesaplamalar için kullanılırlar. 
 
 ## Algebraic data type
 
@@ -302,7 +358,7 @@ Toplamsal tipler, basit olarak `veya` bağlacı ile oluşturulan tipler denilebi
 ```haskell
 data Bool = False | True
 ```
-Bu tanım şunu söylemektedir: Bir `Bool`, `False` veya `True` değerlerinden herhangi birini alabilir. 
+Bu tanım şunu söylemektedir: Bir `Bool`, `False` veya `True` değerlerinden herhangi birini alabilir.
 
 ### Product type
 
