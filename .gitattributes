@@ -1,1 +1,2 @@
-*.hs linguist-language=Haskell
+*.md linguist-vendored=false
+*.md linguist-language=Haskell
