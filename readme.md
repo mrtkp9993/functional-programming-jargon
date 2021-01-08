@@ -1,5 +1,8 @@
 # Fonksiyonel Programlama Jargonu
 
+[![DOI](https://zenodo.org/badge/130886405.svg)](https://zenodo.org/badge/latestdoi/130886405)
+
+
 ## Arity
 
 Bir fonksiyonun aldığı argüman sayısıdır. Bir fonksiyon aldığı argüman sayısına göre _unary_ (1 argüman), _binary_ (2 argüman), _ternary_ (3 argüman)... olarak adlandırılır. Eğer bir fonksiyon değişken sayıda argüman alıyorsa _variadic_ olarak adlandırılır.
